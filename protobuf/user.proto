@@ -1,0 +1,26 @@
+syntax = "proto3" ;
+
+package userPackage ;
+
+service User {
+    rpc registerUser (UserSignIn) returns (GetUser) {} ;
+    rpc loginUser (UserLogin) returns (GetUser) {} ; 
+}
+
+
+message UserSignIn {
+    string name = 1 ;
+    string email = 2 ;
+    string password = 3;
+}
+
+
+message UserLogin {
+    string email = 1 ;
+    string password = 2;
+}
+
+message GetUser {
+    string name = 1 ;
+    string email = 2 ;
+}
