@@ -1,5 +1,11 @@
-// import npms modules
-const bcrypt = require("bcrypt");
+// import environment module
+require('dotenv/config');
+
+//Mongo DB Configuration
+require("./db/mongodb");
+
+// request service controller
+const userController = require("./controller/userController")
 
 // import grpc and protoloader
 const grpc = require("@grpc/grpc-js");
@@ -27,50 +33,11 @@ server.bindAsync("0.0.0.0:40000", grpc.ServerCredentials.createInsecure(), ()=>{
 
 // add service to the server
 server.addService(UserPackage.User.service, {
-    "registerUser" : registerUser,  // add registerUser method to RPC method registerUser
-    "loginUser" : loginUser  // add registerUser method to RPC method registerUser
+    "registerUser" : userController().register,  // add registerUser method to RPC method registerUser
+    "loginUser" : userController().login  // add registerUser method to RPC method registerUser
 });
 
-// create temporary users list
-const users = [];
 
-// define registerUser method
-async function registerUser(call, callback){
 
-    // hashing the password with bcrypt
-    const hashPass = await bcrypt.hash(call.request.password, 10);
 
-    // create New User
-    const user = {
-        "name" : call.request.name ,
-        "email" : call.request.email ,
-        "password" : hashPass
-    }
-
-    users.push(user);
-    console.log(user)
-    
-    // execute callback defined by the client has two arg error | response
-    callback(null, {"name" : user.name, "email" : user.email})
-
-}
-
-// define loginUser
- function loginUser(call, callback){
-
-    const isMatched = async (user) => await bcrypt.compare(call.request.password, user.password) && user.email === call.request.email ;
-
-    ( async () => {
-        const shouldFilter = await Promise.all(users.map(isMatched));
-        const filteredUsers = users.filter((user, index) => shouldFilter[index]);
-            
-        if(!filteredUsers.length){
-            console.log("true exec")
-            callback(null, {"name" : "not found", "email" : "not found"})
-        }else{
-            console.log("false exec")
-            callback(null, {"name" : filteredUsers[0].name, "email" : filteredUsers[0].email})
-        }
-    })();
-}
 
