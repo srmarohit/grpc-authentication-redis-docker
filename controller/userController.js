@@ -38,21 +38,7 @@ module.exports = function userController() {
 
     // define loginUser
     login: async (call, callback) => {
-      // const isMatched = async (user) => await bcrypt.compare(call.request.password, user.password) && user.email === call.request.email ;
-
-      // ( async () => {
-      //     const shouldFilter = await Promise.all(users.map(isMatched));
-      //     const filteredUsers = users.filter((user, index) => shouldFilter[index]);
-
-      //     if(!filteredUsers.length){
-      //         console.log("true exec")
-      //         callback(null, {"name" : "not found", "email" : "not found"})
-      //     }else{
-      //         console.log("false exec")
-      //         callback(null, {"name" : filteredUsers[0].name, "email" : filteredUsers[0].email})
-      //     }
-      // })();
-
+     
       const user = await User.login(call.request.email, call.request.password);
 
       console.log(user);

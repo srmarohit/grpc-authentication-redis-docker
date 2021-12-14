@@ -1,3 +1,5 @@
+/** not the part of user-auth */
+
 // import grpc and protoloader
 const grpc = require("@grpc/grpc-js");
 const proto_loader = require("@grpc/proto-loader");

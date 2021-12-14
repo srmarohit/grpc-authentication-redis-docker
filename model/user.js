@@ -24,11 +24,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// apply instace method of userSchema
-// userSchema.methods.isEmailExists = async (email) => {
-//       return await mongoose.model("User").findOne({email});
-// }
-
 userSchema.statics.login = async function(email, password){
 
     const user = await this.findOne({email});
